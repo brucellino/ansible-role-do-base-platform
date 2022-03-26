@@ -12,6 +12,11 @@ terraform {
       source  = "hashicorp/vault"
       version = "3.4.0"
     }
+
+    local = {
+      source  = "hashicorp/local"
+      version = "2.2.2"
+    }
   }
   backend "consul" {
     path = "do/test/ansible-role-do-base-platform"
@@ -32,7 +37,10 @@ data "digitalocean_vpc" "vpc" {
 
 data "digitalocean_ssh_key" "test_instances" {
   name = "test-instances"
+}
 
+data "vault_generic_secret" "ssh_key" {
+  path = "digitalocean/ssh_key"
 }
 
 data "digitalocean_image" "base_image" {
@@ -52,6 +60,16 @@ resource "digitalocean_droplet" "test" {
   ssh_keys      = [data.digitalocean_ssh_key.test_instances.id]
 
 }
+
+# write the private key for Ansible later
+resource "local_sensitive_file" "ssh_priv_key" {
+  filename        = "ssh_priv_key"
+  content         = data.vault_generic_secret.ssh_key.data["private_key"]
+  file_permission = "0400"
+}
+
+# Create the inventory for Ansible in a local file, templating the ip address of the test instance
+
 
 output "droplet_output" {
   value = digitalocean_droplet.test.ipv4_address

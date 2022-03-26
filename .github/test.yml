@@ -1,31 +1,14 @@
 ---
 # Playbook to test the role
-- name: Create Test instance
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  tasks:
-    - name: Create a test instance
-      digital_ocean_droplet:
-        state: present
-        name: "{{ role_name }}-test"
-        region: ams3
-        size: s-1vcpu-1gb
-        image: ubuntu-21-10-x64
-        ssh_keys:
-          - "{{ ssh_key_id }}"
-        tags:
-          - "{{ role_name }}"
-          - "{{ role_name }}-test"
-        wait: true
-        wait_timeout: 500
-        wait_sleep_time: 5
-        ssh_interface: public_ipv4
-        user_data: |
-          #cloud-config
-          runcmd:
-            - [ "echo", "Hello, World!" ]
-        monitoring: false
+# - name: Ensure python3
+#   hosts: all
+#   user: root
+#   gather_facts: false
+#   tasks:
+#     - raw: apt-get update && apt-get install -y python3 python3-pip
 
-
-- name: Destroy test instance
+- name: Apply role
+  hosts: all
+  user: root
+  roles:
+    - ansible-role-do-base-platform
