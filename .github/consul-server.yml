@@ -1,0 +1,6 @@
+---
+- name: Consul Servers
+  hosts: all
+  user: root
+  roles:
+    - ansible-role-do-base-platform
