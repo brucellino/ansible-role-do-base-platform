@@ -18,7 +18,7 @@ jobs:
           node-version: 'lts/*'
       - name: Install semantic release dependencies
         run: |
-          npm install -g \
+          npm install -D \
           '@semantic-release/commit-analyzer' \
           '@semantic-release/changelog' \
           '@semantic-release/release-notes-generator' \
