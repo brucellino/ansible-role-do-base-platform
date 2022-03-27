@@ -1,0 +1,8 @@
+server = true
+bootstrap_expect = 3
+
+{% raw %}
+bind_addr = "0.0.0.0"
+advertise_addr = "{{ GetPrivateInterfaces | include \"network\" \"10.0.0.0/8\" | attr \"address\" }}"
+{% endraw %}
+client_addr = "0.0.0.0"

@@ -1,7 +1,7 @@
 - name: Distribute CA public certificate
   ansible.builtin.copy:
     content: "{{ lookup('hashi_vault', 'digitalocean/data/consul')['ca_cert'] }}"
-    dest: /etc/consul.d/consul-agent-ca.pem
+    dest: /etc/consul.d/consul-ca.pem
     owner: consul
     group: consul
     mode: "0640"
