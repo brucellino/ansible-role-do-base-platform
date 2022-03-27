@@ -2,20 +2,20 @@ packer {
   required_plugins {
     digitalocean = {
       version = "= 1.0.3"
-      source = "github.com/hashicorp/digitalocean"
+      source  = "github.com/hashicorp/digitalocean"
     }
 
     ansible = {
       version = "= 1.0.1"
-      source = "github.com/hashicorp/ansible"
+      source  = "github.com/hashicorp/ansible"
     }
   }
 }
 
 variable "snapshot_name" {
-  type = string
+  type        = string
   description = "Name of the snapshot to store"
-  default = "consul-server"
+  default     = "consul-server"
 }
 
 variable "region" {
@@ -37,8 +37,8 @@ variable "droplet_name" {
 }
 
 variable "vpc_id" {
-  type = string
-  default = "06b0e26c-6fdf-48e5-b5fc-cf2c631b08df"
+  type        = string
+  default     = "06b0e26c-6fdf-48e5-b5fc-cf2c631b08df"
   description = "ID of the Digital Ocean VPC to use"
 }
 
@@ -52,17 +52,17 @@ variable "tags" {
 }
 
 source "digitalocean" "consul_server" {
-  snapshot_name = var.snapshot_name
-  api_token = vault("digitalocean/data/tokens", "packer")
-  image = "ubuntu-21-10-x64"
+  snapshot_name      = var.snapshot_name
+  api_token          = vault("digitalocean/data/tokens", "packer")
+  image              = "ubuntu-21-10-x64"
   region             = var.region
   size               = var.size
   ssh_username       = "root"
   private_networking = true
   droplet_name       = var.droplet_name
-  monitoring = false
-  vpc_uuid = var.vpc_id
-  tags = var.tags
+  monitoring         = false
+  vpc_uuid           = var.vpc_id
+  tags               = var.tags
 }
 
 build {
@@ -74,7 +74,7 @@ build {
       "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'",
       "ANSIBLE_ROLES_PATH=../../"
     ]
-    user = "root"
+    user         = "root"
     pause_before = "30s"
   }
 }
